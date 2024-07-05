@@ -8,7 +8,7 @@ import os
 def img2array(file_path):
     try: 
         image = Image.open(file_path)  
-        image = image.resize((64, 64))  
+        image = image.resize((250, 250))  
         image_array = np.array(image) / 255.0  # 转化成array，并且除以 255 进行数据标准化方法。
         # 神经网络训练时，较小的数值范围（如 0 到 1）可以帮助模型更快地收敛，因为大的数值范围或极端值可能会导致训练过程中的数值不稳定。
         # 同时因为sigmoid函数在z很大的时候会变得很平缓，所以小一点会训练快一点
@@ -24,7 +24,7 @@ def img2array(file_path):
         return None
 
 def load_pictures(folder_path):
-    X = np.empty((12288, 0))  # 行数不变（每一张照片都是64**2*3个元素），列数可以变（逐个加载照片）
+    X = np.empty((250*250*3, 0))  # 行数不变（每一张照片都是64**2*3个元素），列数可以变（逐个加载照片）
     Y = np.empty((1, 0))  # 行数不变（每一张照片只有一个结果，是不是猫），列数可以变（逐个加载照片）
     file_list = [file for file in os.scandir(folder_path) if file.is_file()]
     m=len(file_list)
@@ -247,7 +247,7 @@ if __name__ == "__main__":
 
 
     # 超参数
-    dim=12288  #图片的输入形状 64*64*3
+    dim=250*250*3  #图片的输入形状 64*64*3
     layer_dims = [dim, 20, 5, 5, 1]  # 本参数可以任意修改隐藏层数和每个层的节点数
     func_choose=[0,3,3,3,1]       # 本层可以设置每层的激活函数，除了第一层没有激活函数是None
     learning_rate=0.01
