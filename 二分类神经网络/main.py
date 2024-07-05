@@ -11,6 +11,7 @@ def img2array(file_path):
         image = image.resize((64, 64))  
         image_array = np.array(image) / 255.0  # 转化成array，并且除以 255 进行数据标准化方法。
         # 神经网络训练时，较小的数值范围（如 0 到 1）可以帮助模型更快地收敛，因为大的数值范围或极端值可能会导致训练过程中的数值不稳定。
+        # 同时因为sigmoid函数在z很大的时候会变得很平缓，所以小一点会训练快一点
         if image_array.shape[2] != 3:  # 确认是RGB格式
             print("图片不是RGB格式")
             return None
@@ -24,7 +25,7 @@ def img2array(file_path):
 
 def load_pictures(folder_path):
     X = np.empty((12288, 0))  # 行数不变（每一张照片都是64**2*3个元素），列数可以变（逐个加载照片）
-    Y = np.empty((1, 0))  # 行数不变（每一张照片只有一个特征，是不是猫），列数可以变（逐个加载照片）
+    Y = np.empty((1, 0))  # 行数不变（每一张照片只有一个结果，是不是猫），列数可以变（逐个加载照片）
     file_list = [file for file in os.scandir(folder_path) if file.is_file()]
     m=len(file_list)
 
@@ -67,7 +68,7 @@ def optimize(w, b, X, Y,learning_rate):   #单次传播（也就是一次优化�
 
 
 # 核心控制模块
-def main(w, b, X, Y, num_iterations, learning_rate, print_cost=False):
+def train(w, b, X, Y, num_iterations, learning_rate, print_cost=False):
     costs = []
 
     for i in range(num_iterations):
@@ -85,19 +86,16 @@ def main(w, b, X, Y, num_iterations, learning_rate, print_cost=False):
 
 
 # 测试模块
-def predict(w, b, X):
-    m = X.shape[1]
+def test(w, b, X,m):
     Y_prediction = np.zeros((1, m))
     Z = np.dot(w.T, X) + b
     A = sigmoid(Z)
     
     for i in range(A.shape[1]):
-        Y_prediction[0, i] = 1 if A[0, i] > 0.5 else 0
+        Y_prediction[0, i] = 1 if A[0, i] > 0.5 else 0  
+        # 把Y_predict中大于0.5的改成1，否则改成0，用于表示每一个最终预测结果
     
     return Y_prediction
-
-
-
 
 
 
@@ -117,15 +115,16 @@ if __name__ == "__main__":
     w = np.zeros((dim, 1))
     b = 0
 
-    final_w, final_b, final_dw, final_db, costs = main(w, b, X, Y, num_iterations=2000, learning_rate=0.005, print_cost=True)  #训练2k次，每次的步长为0.005
+    final_w, final_b, final_dw, final_db, costs = train(w, b, X, Y, num_iterations=2000, learning_rate=0.005, print_cost=True)  #训练2k次，每次的步长为0.005
 
     print("Optimization finished.")
 
 
 
-
+    #测试准确度
+    # 册数数据集中，全是猫的图片，用来检测二分类准确性 
     X_test, Y_test, m_test = load_pictures(test_path)
-    Y_prediction = predict(w, b, X_test)
+    Y_prediction = test(final_w, final_b, X_test,m_test)
     print("Accuracy:", np.mean(Y_prediction == Y_test))
     print("Optimization finished.")
 
