@@ -221,8 +221,8 @@ def test(X_test, parameters,chosen_func,m_test): #管理所有向前传播细节
 
 
 if __name__ == "__main__":
-    train_path = r"C:\Users\28121\Desktop\deep_learning\deep-learning\深层神经网络\train"
-    test_path = r"C:\Users\28121\Desktop\deep_learning\deep-learning\深层神经网络\test"
+    train_path = r".\train"
+    test_path = r".\test"
 
     X, Y, m = load_pictures(train_path)  #m是训练样本数，Y是标注集，X是训练集
     print("X shape:", X.shape)
