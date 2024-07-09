@@ -249,7 +249,7 @@ def test(X_test, parameters,chosen_func,m_test): #管理所有向前传播细节
 if __name__ == "__main__":
     # train_path = r"C:\Users\28121\Desktop\deep_learning\deep-learning\浅层神经网络\train"
     # test_path = r"C:\Users\28121\Desktop\deep_learning\deep-learning\浅层神经网络\test"
-    train_path = r".\train"
+    train_path = r".\train_heavy"
     test_path = r".\test"
 
 
