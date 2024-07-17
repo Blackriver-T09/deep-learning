@@ -275,9 +275,9 @@ if __name__ == "__main__":
     layer_dims = [dim, 20, 10,  5,  1]  # 本参数可以任意修改隐藏层数和每个层的节点数
     func_choose= [0,   3,  3,   3,  1]       # 本层可以设置每层的激活函数，除了第一层没有激活函数是None
     learning_rate= 0.01
-    num_iterations=2000
+    num_iterations=8000
     lambda_=0.00001      #是否启用L2正则化,设置为0关闭L2正则化
-    dropout_keep_prob=[1, 0.8, 0.8, 0.9, 1 ]   #dropout机制：表示各层保留概率，全部为1则关闭Dropout机制，首层和末层必须是1
+    dropout_keep_prob=[1, 0.9, 1, 1, 1 ]   #dropout机制：表示各层保留概率，全部为1则关闭Dropout机制，首层和末层必须是1
 
 
 
